@@ -1,0 +1,20 @@
+[
+  {
+    "name": "babu_rao_confused",
+    "file": "babu_rao.jpg",
+    "description": "Babu Rao (Hera Pheri) staring in confusion. Use when someone says something baffling.",
+    "boxes": [
+      {"x": 0.04, "y": 0.02, "w": 0.92, "h": 0.22, "color": "white", "stroke": true, "uppercase": true, "max_size": 0.09},
+      {"x": 0.04, "y": 0.76, "w": 0.92, "h": 0.22, "color": "white", "stroke": true, "uppercase": true, "max_size": 0.09}
+    ]
+  },
+  {
+    "name": "drake",
+    "file": "drake.jpg",
+    "description": "Drake rejects the top thing and approves the bottom thing.",
+    "boxes": [
+      {"x": 0.52, "y": 0.03, "w": 0.45, "h": 0.44, "color": "black", "stroke": false, "uppercase": false, "max_size": 0.07},
+      {"x": 0.52, "y": 0.53, "w": 0.45, "h": 0.44, "color": "black", "stroke": false, "uppercase": false, "max_size": 0.07}
+    ]
+  }
+]

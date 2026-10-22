@@ -1,0 +1,124 @@
+---
+const gate = ['skip', 'skip', 'react', 'skip', 'skip', 'skip', 'reply', 'skip']
+const bars = [6, 14, 22, 11, 26, 18, 9, 20, 28, 15, 7, 19, 24, 12, 5, 16, 23, 10]
+---
+
+<section class="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-32" aria-labelledby="features-title">
+  <div class="reveal mb-14 flex flex-wrap items-end justify-between gap-6">
+    <div>
+      <p class="label mb-4 text-muted">what it does</p>
+      <h2 id="features-title" class="display max-w-3xl text-[clamp(2.6rem,6vw,5rem)]">A group member, <span class="serif font-normal">not a chatbot.</span></h2>
+    </div>
+    <p class="max-w-xs text-ink/70">No commands needed. It reads along and joins in like a friend who actually gets the group.</p>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-6">
+    <article class="reveal card flex flex-col group relative overflow-hidden p-7 md:col-span-4">
+      <h3 class="text-2xl font-bold tracking-tight">Knows when to shut up</h3>
+      <p class="mt-2 mb-7 max-w-md text-ink/70">Every message goes through a gate: reply, react or stay quiet. Most of the time it stays quiet. That is the point.</p>
+      <div class="mt-auto flex flex-wrap gap-2" data-gate>
+        {
+          gate.map((g) => (
+            <span
+              class:list={[
+                'rounded-full border-2 px-3.5 py-1.5 font-mono text-xs font-bold',
+                g === 'reply' ? 'border-ink bg-lime' : g === 'react' ? 'border-ink bg-paper' : 'border-ink/20 text-ink/40',
+              ]}
+            >
+              {g === 'react' ? 'react 😂' : g}
+            </span>
+          ))
+        }
+      </div>
+    </article>
+
+    <article class="reveal card flex flex-col relative overflow-hidden bg-peach p-7 md:col-span-2">
+      <h3 class="text-2xl font-bold tracking-tight">Remembers the lore</h3>
+      <p class="mt-2 mb-7 text-ink/75">Inside jokes, running bits, who is always late. Callbacks land weeks later.</p>
+      <div class="mt-auto rotate-[-2deg] rounded-xl border-2 border-ink bg-paper p-4 font-mono text-xs leading-relaxed shadow-hard">
+        <p class="font-bold">aman</p>
+        <p>"5 min mein aaya"</p>
+        <p class="text-muted">said 23 times. arrived on time twice</p>
+      </div>
+    </article>
+
+    <article class="reveal card flex flex-col p-7 md:col-span-2">
+      <h3 class="text-2xl font-bold tracking-tight">Roasts pass a critic</h3>
+      <p class="mt-2 mb-7 text-ink/70">A second model checks every spicy line. Mean or lazy drafts get rewritten.</p>
+      <div class="mt-auto space-y-2 text-sm">
+        <p class="rounded-xl border-2 border-dashed border-ink/30 px-3 py-2 text-ink/40 line-through decoration-2">rahul is just bad at everything</p>
+        <p class="rounded-xl border-2 border-ink bg-lime px-3 py-2 font-medium">rahul has dropped a podcast episode. no one asked. everyone's listening</p>
+      </div>
+    </article>
+
+    <article class="reveal card flex flex-col bg-ink p-7 text-paper md:col-span-2">
+      <h3 class="text-2xl font-bold tracking-tight">Weekly awards</h3>
+      <p class="mt-2 mb-7 text-paper/70">A Sunday night recap your group will screenshot.</p>
+      <ol class="mt-auto space-y-2 text-sm">
+        <li class="flex items-center justify-between rounded-lg border border-paper/20 px-3 py-2"><span>🏆 Ghost of the Week</span><span class="font-mono text-lime">dev</span></li>
+        <li class="flex items-center justify-between rounded-lg border border-paper/20 px-3 py-2"><span>🎭 Most Dramatic</span><span class="font-mono text-lime">priya</span></li>
+        <li class="flex items-center justify-between rounded-lg border border-paper/20 px-3 py-2"><span>⏰ Fashionably Late</span><span class="font-mono text-lime">aman</span></li>
+      </ol>
+    </article>
+
+    <article class="reveal card flex flex-col overflow-hidden bg-sky p-7 md:col-span-2">
+      <h3 class="text-2xl font-bold tracking-tight">Voice notes and memes</h3>
+      <p class="mt-2 mb-7 text-ink/75">Hears voice notes, sends its own, and turns your chat's best moments into memes.</p>
+      <div class="mt-auto flex items-center gap-3 rounded-full border-2 border-ink bg-paper px-4 py-3">
+        <span class="grid size-8 shrink-0 place-items-center rounded-full bg-ink text-paper" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="size-3.5" fill="currentColor"><path d="M7 4v16l13-8z"></path></svg>
+        </span>
+        <div class="flex h-8 flex-1 items-center gap-[3px]" aria-hidden="true">
+          {bars.map((h, i) => <span class="wave w-[3px] flex-1 rounded-full bg-ink" style={`height:${h}px;animation-delay:${-i * 0.09}s`} />)}
+        </div>
+        <span class="font-mono text-xs">0:07</span>
+      </div>
+    </article>
+
+    <article class="reveal card flex flex-col p-7 md:col-span-3">
+      <h3 class="text-2xl font-bold tracking-tight">Talks like your group</h3>
+      <p class="mt-2 mb-7 max-w-md text-ink/70">Hinglish, Hindi or English. Picks up what the internet is laughing at this week, and drops it only when it fits.</p>
+      <div class="mt-auto flex flex-wrap gap-2 text-sm font-medium">
+        <span class="rotate-[-3deg] rounded-full border-2 border-ink bg-lime px-3 py-1">kya scene hai</span>
+        <span class="rotate-[2deg] rounded-full border-2 border-ink bg-pink px-3 py-1">bas kar bhai</span>
+        <span class="rotate-[-1deg] rounded-full border-2 border-ink bg-lilac px-3 py-1">main character energy</span>
+        <span class="rotate-[3deg] rounded-full border-2 border-ink bg-peach px-3 py-1">is baar pakka</span>
+      </div>
+    </article>
+
+    <article class="reveal card flex flex-col bg-lime p-7 md:col-span-3">
+      <h3 class="text-2xl font-bold tracking-tight">You hold the remote</h3>
+      <p class="mt-2 mb-7 max-w-md text-ink/75">Only you can switch it off, quiet it down or change its vibe. Everyone else gets a polite no.</p>
+      <div class="mt-auto space-y-2 rounded-2xl border-2 border-ink bg-ink p-4 font-mono text-[0.8rem] text-paper">
+        <p><span class="text-dim">aman:</span> !off</p>
+        <p class="text-lime">🤖 nice try. remote Kabir ke haath mein hai</p>
+        <p><span class="text-dim">kabir:</span> !vibe study</p>
+        <p class="text-lime">🤖 vibe switched: Study Group</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .wave {
+    animation: wave 1.2s ease-in-out infinite alternate;
+    transform-origin: center;
+  }
+  @keyframes wave {
+    from { transform: scaleY(0.35); }
+    to { transform: scaleY(1); }
+  }
+</style>
+
+<script>
+  import { animate } from 'motion'
+
+  const chips = [...document.querySelectorAll<HTMLElement>('[data-gate] span')]
+  if (chips.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let i = 0
+    setInterval(() => {
+      const chip = chips[i++ % chips.length]
+      animate(chip, { y: [0, -6, 0] }, { duration: 0.45 })
+    }, 420)
+  }
+</script>

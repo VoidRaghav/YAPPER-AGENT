@@ -1,0 +1,38 @@
+{
+  "id": "my-pack",
+  "name": "My Pack",
+  "tagline": "One line about the vibe",
+  "color": "#f5f5f0",
+  "role": "who the bot is in this group, in a few words",
+  "persona": "Describe the character in plain words: who they are, how they talk, what they find funny, what they care about. Two or three short paragraphs work best.",
+  "vibe": {
+    "spice": 2,
+    "chattiness": 2,
+    "formality": 1,
+    "emoji": 1
+  },
+  "language": "english",
+  "roasts": false,
+  "speak_when": [
+    "moments when the bot should jump in"
+  ],
+  "quiet_when": [
+    "moments when it should stay silent"
+  ],
+  "features": {
+    "memes": true,
+    "voice": false,
+    "weekly_recap": true,
+    "reactions": true,
+    "trends": true
+  },
+  "off_limits": [],
+  "recap_style": "a short weekly recap",
+  "intro": "hi! I'm {BOT_NAME}, the new member of this group",
+  "examples": [
+    {
+      "them": "Someone: an example message",
+      "you": "how the bot would reply"
+    }
+  ]
+}

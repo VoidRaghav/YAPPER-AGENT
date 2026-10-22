@@ -1,0 +1,27 @@
+---
+import Logo from './Logo.astro'
+import { nav, site } from '../lib/site'
+---
+
+<section class="px-4 pt-28 pb-16 text-center sm:px-6 lg:pt-36" aria-labelledby="cta-title">
+  <p class="reveal label mb-6 text-muted">free and open source</p>
+  <h2 id="cta-title" class="reveal display mx-auto max-w-5xl text-[clamp(3.2rem,10vw,9rem)]">
+    Your group chat, <span class="serif font-normal">plus one.</span>
+  </h2>
+  <div class="reveal mt-10 flex flex-wrap justify-center gap-3">
+    <a href={site.github} class="btn bg-ink text-paper" rel="noopener">Star it on GitHub</a>
+    <a href="#build" class="btn bg-lime">Make your pack</a>
+  </div>
+</section>
+
+<footer class="relative overflow-hidden border-t-2 border-ink">
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-4 py-8 text-sm sm:px-6">
+    <Logo class="text-lg" />
+    <ul class="flex flex-wrap gap-x-6 gap-y-2 font-medium">
+      {nav.map((item) => <li><a href={item.href} class="hover:underline">{item.label}</a></li>)}
+      <li><a href={site.github} class="hover:underline" rel="noopener">GitHub</a></li>
+    </ul>
+    <p class="text-muted">Made in India for group chats everywhere.</p>
+  </div>
+  <p class="display pointer-events-none -mb-[0.05em] text-center text-[27vw] leading-[0.8] text-ink select-none" aria-hidden="true">yapper</p>
+</footer>

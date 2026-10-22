@@ -1,0 +1,27 @@
+---
+import '@fontsource-variable/bricolage-grotesque/standard.css'
+import '@fontsource/instrument-serif/400-italic.css'
+import '@fontsource-variable/jetbrains-mono'
+import '../styles/global.css'
+import { site } from '../lib/site'
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f1ede4" />
+    <title>{site.title}</title>
+    <meta name="description" content={site.description} />
+    <meta property="og:title" content={site.title} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>document.documentElement.classList.remove('no-js')</script>
+  </head>
+  <body class="grain">
+    <slot />
+  </body>
+</html>

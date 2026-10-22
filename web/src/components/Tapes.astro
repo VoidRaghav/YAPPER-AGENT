@@ -1,0 +1,36 @@
+---
+import { packs } from '../lib/packs'
+
+const skills = ['reads the room', 'remembers the lore', 'roasts on request', 'weekly awards', 'voice notes', 'memes from your own chat', 'knows when to shut up']
+---
+
+<div class="relative isolate h-44 overflow-hidden sm:h-52" aria-hidden="true">
+  <div class="absolute top-1/2 left-[-5%] w-[110%] -translate-y-1/2 rotate-[3deg] border-y-2 border-ink bg-ink py-3">
+    <div class="flex w-max animate-marquee-rev whitespace-nowrap">
+      {
+        [0, 1].map(() =>
+          [...packs, ...packs].map((p) => (
+            <span class="display flex items-center gap-8 pr-8 text-2xl font-extrabold sm:text-3xl" style={`color:${p.color}`}>
+              {p.name.toLowerCase()}
+              <span class="text-paper/40">✦</span>
+            </span>
+          )),
+        )
+      }
+    </div>
+  </div>
+  <div class="absolute top-1/2 left-[-5%] w-[110%] -translate-y-1/2 rotate-[-2.5deg] border-y-2 border-ink bg-lime py-3 shadow-[0_8px_0_0_rgba(19,19,17,0.12)]">
+    <div class="flex w-max animate-marquee whitespace-nowrap">
+      {
+        [0, 1].map(() =>
+          skills.map((s) => (
+            <span class="display flex items-center gap-8 pr-8 text-2xl font-extrabold sm:text-3xl">
+              {s}
+              <span>✦</span>
+            </span>
+          )),
+        )
+      }
+    </div>
+  </div>
+</div>

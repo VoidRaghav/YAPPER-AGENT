@@ -1,0 +1,30 @@
+---
+const rules = [
+  { emoji: '🤖', text: 'Says it is an AI in its very first message.' },
+  { emoji: '🚫', text: 'Never jokes about looks, family, religion, caste, money or health. Enforced in code.' },
+  { emoji: '🫂', text: 'Spots a rough day and drops the jokes for twelve hours.' },
+  { emoji: '🧽', text: 'Anyone can type !forget me and it forgets them.' },
+  { emoji: '🔑', text: 'Only the owner can switch it off or change its vibe.' },
+  { emoji: '🏠', text: 'Self-hosted. Your chats stay on your machine.' },
+]
+---
+
+<section class="mx-2 rounded-[2rem] bg-lime px-4 py-20 sm:mx-4 sm:rounded-[3.5rem] sm:px-6 lg:py-28" aria-labelledby="safety-title">
+  <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+    <div class="reveal">
+      <p class="label mb-4 font-semibold text-ink/60">safety</p>
+      <h2 id="safety-title" class="display text-[clamp(2.8rem,6.5vw,5.5rem)]">Funny, <span class="serif font-normal">with brakes.</span></h2>
+      <p class="mt-5 max-w-sm text-ink/75">Every line it writes passes a filter before it is sent. No exceptions, no prompt tricks.</p>
+    </div>
+    <ul class="grid gap-3 sm:grid-cols-2">
+      {
+        rules.map((r) => (
+          <li class="reveal flex items-start gap-3 rounded-2xl border-2 border-ink bg-paper p-4">
+            <span class="text-2xl leading-none" aria-hidden="true">{r.emoji}</span>
+            <span class="font-medium leading-snug">{r.text}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

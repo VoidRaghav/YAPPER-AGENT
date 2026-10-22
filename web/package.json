@@ -1,0 +1,23 @@
+{
+  "name": "yapper-web",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.4",
+    "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "5.3.0",
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@fontsource/instrument-serif": "5.3.0",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "5.18.2",
+    "motion": "14.6.0",
+    "tailwindcss": "4.3.3"
+  }
+}

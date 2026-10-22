@@ -1,0 +1,56 @@
+name: yapper
+
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: yapper
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-yapper}
+      POSTGRES_DB: yapper
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U yapper -d yapper"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  brain:
+    build:
+      context: .
+      dockerfile: brain/Dockerfile
+    env_file: .env
+    environment:
+      DB_URL: postgresql://yapper:${POSTGRES_PASSWORD:-yapper}@db:5432/yapper
+      DATA_DIR: /data
+      GATEWAY_URL: http://gateway:3001
+    volumes:
+      - brain-data:/data
+      - ./packs:/app/packs:ro
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  gateway:
+    build: ./gateway
+    env_file: .env
+    environment:
+      BRAIN_URL: http://brain:8000
+      GATEWAY_HOST: 0.0.0.0
+      GATEWAY_AUTH_DIR: /data/auth
+    volumes:
+      - gateway-data:/data
+    ports:
+      - "127.0.0.1:3001:3001"
+    depends_on:
+      - brain
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  brain-data:
+  gateway-data:

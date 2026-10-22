@@ -1,0 +1,78 @@
+---
+import { effectiveSpice, featureLabels, splitLine, vibeScale, type Features, type Pack } from '../lib/packs'
+
+type Props = { pack: Pack; index: number }
+const { pack, index } = Astro.props
+
+const vibe = { ...pack.vibe, spice: effectiveSpice(pack) }
+const features = (Object.keys(featureLabels) as (keyof Features)[]).filter((k) => pack.features[k])
+const sample = pack.examples[0]
+const them = sample ? splitLine(sample.them) : null
+const tilt = [-2.5, 1.8, -1.2, 2.4, -1.8][index % 5]
+---
+
+<article
+  class="reveal pack-card relative flex flex-col rounded-[28px] border-2 border-ink p-6 text-ink shadow-[7px_7px_0_0_var(--color-paper)]"
+  style={`background:${pack.color};--tilt:${tilt}deg`}
+>
+  <div class="flex items-center justify-between gap-3">
+    <span class="label font-bold">pack {String(index + 1).padStart(2, '0')}</span>
+    <div class="flex gap-1.5">
+      <span class="rounded-full border-2 border-ink bg-paper/70 px-2.5 py-0.5 text-xs font-semibold">{pack.language}</span>
+      <span class:list={['rounded-full border-2 border-ink px-2.5 py-0.5 text-xs font-semibold', pack.roasts ? 'bg-ink text-paper' : 'bg-paper/70']}>
+        {pack.roasts ? 'roasts on' : 'no roasts'}
+      </span>
+    </div>
+  </div>
+
+  <h3 class="display mt-6 text-5xl">{pack.name}</h3>
+  <p class="mt-2 text-[0.95rem] leading-snug text-ink/75">{pack.tagline}</p>
+
+  <dl class="mt-6 space-y-2">
+    {
+      vibeScale.map((v) => (
+        <div class="flex items-center gap-3">
+          <dt class="label w-14 shrink-0 font-semibold">{v.label}</dt>
+          <dd class="flex flex-1 gap-1" aria-label={`${vibe[v.key]} of ${v.max}`}>
+            {Array.from({ length: v.max }, (_, i) => (
+              <span class:list={['h-2.5 flex-1 rounded-full border-[1.5px] border-ink', i < vibe[v.key] ? 'bg-ink' : 'bg-transparent']} />
+            ))}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <ul class="mt-6 flex flex-wrap gap-1.5">
+    {features.map((f) => <li class="rounded-full bg-ink/10 px-2.5 py-1 text-xs font-medium">{featureLabels[f]}</li>)}
+  </ul>
+
+  {
+    sample && them && (
+      <div class="mt-6 space-y-2 rounded-2xl border-2 border-ink bg-paper p-3 text-sm">
+        <p class="leading-snug">
+          {them.who && <span class="font-bold">{them.who} </span>}
+          <span class="text-ink/75">{them.text}</span>
+        </p>
+        <p class="ml-6 rounded-xl rounded-br-sm border-2 border-ink px-3 py-2 leading-snug" style={`background:${pack.color}`}>
+          {sample.you}
+        </p>
+      </div>
+    )
+  }
+
+  <p class="mt-auto pt-6 font-mono text-sm font-bold">!vibe {pack.id}</p>
+</article>
+
+<style>
+  .pack-card {
+    rotate: var(--tilt);
+    transition: rotate 0.35s cubic-bezier(0.3, 1.4, 0.5, 1), transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1), box-shadow 0.35s ease;
+  }
+  .pack-card:hover {
+    rotate: 0deg;
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 12px 12px 0 0 var(--color-paper);
+    z-index: 2;
+  }
+</style>

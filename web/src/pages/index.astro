@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro'
+import Builder from '../components/Builder.astro'
+import Features from '../components/Features.astro'
+import Footer from '../components/Footer.astro'
+import Hero from '../components/Hero.astro'
+import Nav from '../components/Nav.astro'
+import Packs from '../components/Packs.astro'
+import Platforms from '../components/Platforms.astro'
+import Safety from '../components/Safety.astro'
+import Setup from '../components/Setup.astro'
+import Tapes from '../components/Tapes.astro'
+---
+
+<Base>
+  <Nav />
+  <main>
+    <Hero />
+    <Tapes />
+    <Features />
+    <Packs />
+    <Builder />
+    <Setup />
+    <Platforms />
+    <Safety />
+    <Footer />
+  </main>
+</Base>
+
+<script>
+  import { animate, inView } from 'motion'
+
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  document.querySelectorAll<HTMLElement>('.reveal').forEach((el) => {
+    if (still) return
+    inView(
+      el,
+      () => {
+        const siblings = [...(el.parentElement?.children ?? [])].filter((c) => c.classList.contains('reveal'))
+        const delay = Math.min(siblings.indexOf(el), 5) * 0.07
+        animate(el, { opacity: [0, 1], translate: ['0 28px', '0 0'] }, { delay, duration: 0.7, ease: [0.2, 0.9, 0.1, 1] })
+      },
+      { margin: '0px 0px -12% 0px' },
+    )
+  })
+</script>

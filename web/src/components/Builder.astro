@@ -1,0 +1,303 @@
+---
+const colors = ['#c8f560', '#ffb38a', '#7aa7ff', '#d9d4ff', '#ff7ad9', '#ffe066', '#7ae0c3', '#f1ede4']
+
+const sliders = [
+  { key: 'spice', label: 'Spice', max: 5, value: 3, words: ['sweet', 'mild', 'teasing', 'spicy', 'savage', 'no mercy'] },
+  { key: 'chattiness', label: 'Chattiness', max: 5, value: 2, words: ['lurker', 'rare', 'sometimes', 'regular', 'chatty', 'never stops'] },
+  { key: 'formality', label: 'Formality', max: 5, value: 0, words: ['bro', 'casual', 'relaxed', 'neutral', 'polished', 'corporate'] },
+  { key: 'emoji', label: 'Emoji', max: 3, value: 1, words: ['none', 'rare', 'some', 'lots'] },
+]
+
+const toggles = [
+  { key: 'roasts', label: 'Roasts', on: true },
+  { key: 'memes', label: 'Memes', on: true },
+  { key: 'voice', label: 'Voice notes', on: false },
+  { key: 'weekly_recap', label: 'Weekly awards', on: true },
+  { key: 'reactions', label: 'Reactions', on: true },
+  { key: 'trends', label: 'Trends', on: true },
+]
+
+const defaults = {
+  name: 'Hostel Wing B',
+  tagline: 'The senior who has seen it all',
+  role: 'the hostel senior who has survived everything',
+  persona: "You're the senior who survived four years of mess food, 8am labs and power cuts. Dry, unbothered, quietly helpful. You roast excuses, never people's struggles.",
+  intro: 'main {BOT_NAME}, is wing ka senior. mess ka khana aur tumhare excuses, dono jhel lunga',
+}
+
+const field = 'w-full rounded-xl border-2 border-ink bg-paper px-3.5 py-2.5 text-[0.95rem] outline-none transition-shadow focus:shadow-hard'
+---
+
+<section id="build" class="scroll-mt-16" aria-labelledby="build-title">
+  <div class="px-4 py-24 sm:px-6 lg:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal mb-14 flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <p class="label mb-4 text-muted">build your own</p>
+          <h2 id="build-title" class="display text-[clamp(2.8rem,7vw,6rem)]">One file. <span class="serif font-normal">Any personality.</span></h2>
+        </div>
+        <p class="max-w-sm text-ink/70">A pack is a small JSON file. Shape it here, drop it in <code class="rounded bg-ink/10 px-1.5 py-0.5 font-mono text-sm">packs/</code> and switch to it from the chat.</p>
+      </div>
+
+      <div class="grid grid-cols-[minmax(0,1fr)] items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+        <form class="reveal card space-y-6 p-6 sm:p-8" data-builder autocomplete="off">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="block space-y-1.5">
+              <span class="label font-semibold">Name</span>
+              <input class={field} name="name" value={defaults.name} maxlength="40" />
+            </label>
+            <label class="block space-y-1.5">
+              <span class="label font-semibold">Tagline</span>
+              <input class={field} name="tagline" value={defaults.tagline} maxlength="70" />
+            </label>
+          </div>
+
+          <label class="block space-y-1.5">
+            <span class="label font-semibold">Who it is in the group</span>
+            <input class={field} name="role" value={defaults.role} maxlength="90" />
+          </label>
+
+          <label class="block space-y-1.5">
+            <span class="label font-semibold">Personality</span>
+            <textarea class:list={[field, 'min-h-28 resize-y leading-relaxed']} name="persona" maxlength="900">{defaults.persona}</textarea>
+          </label>
+
+          <div class="grid gap-6 sm:grid-cols-[auto_1fr]">
+            <fieldset class="space-y-2">
+              <legend class="label mb-2 font-semibold">Language</legend>
+              <div class="inline-flex rounded-full border-2 border-ink p-1">
+                {
+                  ['hinglish', 'english', 'hindi'].map((lang, i) => (
+                    <label class="cursor-pointer">
+                      <input type="radio" name="language" value={lang} checked={i === 0} class="peer sr-only" />
+                      <span class="block rounded-full px-3.5 py-1.5 text-sm font-semibold transition-colors peer-checked:bg-ink peer-checked:text-paper peer-focus-visible:ring-2 peer-focus-visible:ring-ink">{lang}</span>
+                    </label>
+                  ))
+                }
+              </div>
+            </fieldset>
+            <fieldset class="space-y-2">
+              <legend class="label mb-2 font-semibold">Color</legend>
+              <div class="flex flex-wrap gap-2">
+                {
+                  colors.map((c, i) => (
+                    <label class="cursor-pointer">
+                      <input type="radio" name="color" value={c} checked={i === 0} class="peer sr-only" />
+                      <span
+                        class="block size-9 rounded-full border-2 border-ink transition-transform peer-checked:scale-110 peer-checked:shadow-[0_0_0_3px_var(--color-paper),0_0_0_5px_var(--color-ink)] peer-focus-visible:ring-2 peer-focus-visible:ring-ink"
+                        style={`background:${c}`}
+                      />
+                      <span class="sr-only">{c}</span>
+                    </label>
+                  ))
+                }
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="grid gap-x-8 gap-y-5 sm:grid-cols-2">
+            {
+              sliders.map((s) => (
+                <label class="block">
+                  <span class="mb-2 flex items-baseline justify-between gap-3">
+                    <span class="label font-semibold">{s.label}</span>
+                    <span class="font-mono text-xs text-muted" data-word={s.key}>
+                      {s.words[s.value]}
+                    </span>
+                  </span>
+                  <input type="range" name={s.key} min="0" max={s.max} value={s.value} step="1" data-words={JSON.stringify(s.words)} class="slider w-full" />
+                </label>
+              ))
+            }
+          </div>
+          <p class="-mt-2 hidden rounded-xl bg-peach/60 px-3 py-2 text-sm" data-cap>Roasts are off, so spice stays at 2 or below in the group.</p>
+
+          <fieldset>
+            <legend class="label mb-3 font-semibold">Features</legend>
+            <div class="flex flex-wrap gap-2">
+              {
+                toggles.map((t) => (
+                  <label class="cursor-pointer">
+                    <input type="checkbox" name={t.key} checked={t.on} class="peer sr-only" />
+                    <span class="flex items-center gap-2 rounded-full border-2 border-ink px-3.5 py-1.5 text-sm font-semibold transition-colors peer-checked:bg-lime peer-focus-visible:ring-2 peer-focus-visible:ring-ink">
+                      <span class="tick grid size-4 place-items-center rounded-full border-2 border-ink text-[0.6rem]" />
+                      {t.label}
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <label class="block space-y-1.5">
+            <span class="label font-semibold">First message</span>
+            <input class={field} name="intro" value={defaults.intro} maxlength="160" />
+          </label>
+        </form>
+
+        <div class="min-w-0 space-y-5 lg:sticky lg:top-24">
+          <div class="reveal flex flex-col gap-4 rounded-[28px] border-2 border-ink p-5 shadow-hard sm:flex-row sm:items-center" data-preview>
+            <div class="min-w-0 flex-1">
+              <p class="label font-bold">your pack</p>
+              <p class="display mt-1 truncate text-4xl" data-out="name"></p>
+              <p class="truncate text-sm text-ink/70" data-out="tagline"></p>
+            </div>
+            <div class="max-w-xs rounded-2xl rounded-bl-md border-2 border-ink bg-paper px-3.5 py-2.5 text-sm leading-snug">
+              <p class="mb-0.5 font-mono text-[0.66rem] font-bold uppercase tracking-wider">🤖 yapper</p>
+              <p data-out="intro"></p>
+            </div>
+          </div>
+
+          <div class="reveal overflow-hidden rounded-[22px] border-2 border-ink bg-ink-2 text-paper shadow-hard">
+            <div class="flex items-center gap-3 border-b border-paper/15 px-4 py-3">
+              <span class="flex gap-1.5" aria-hidden="true">
+                <span class="size-3 rounded-full bg-pink"></span><span class="size-3 rounded-full bg-peach"></span><span class="size-3 rounded-full bg-lime"></span>
+              </span>
+              <span class="font-mono text-xs text-paper/60">packs/<span data-out="file"></span></span>
+              <div class="ml-auto flex gap-2">
+                <button type="button" class="rounded-full border border-paper/30 px-3 py-1 font-mono text-xs transition-colors hover:bg-paper hover:text-ink" data-copy>copy</button>
+                <button type="button" class="rounded-full bg-lime px-3 py-1 font-mono text-xs font-bold text-ink transition-transform hover:-translate-y-0.5" data-download>download</button>
+              </div>
+            </div>
+            <pre class="max-h-[30rem] overflow-auto p-5 font-mono text-[0.78rem] leading-relaxed"><code data-json></code></pre>
+          </div>
+
+          <ol class="reveal grid gap-3 text-sm sm:grid-cols-3">
+            <li class="rounded-2xl border-2 border-ink p-4"><span class="label block font-bold">01</span>Save it in <code class="font-mono">packs/</code></li>
+            <li class="rounded-2xl border-2 border-ink p-4"><span class="label block font-bold">02</span>No restart. Packs reload on save</li>
+            <li class="rounded-2xl border-2 border-ink bg-lime p-4"><span class="label block font-bold">03</span>Type <code class="font-mono font-bold" data-out="cmd"></code></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .slider {
+    appearance: none;
+    height: 10px;
+    border-radius: 999px;
+    border: 2px solid var(--color-ink);
+    background: linear-gradient(to right, var(--color-ink) var(--fill, 50%), transparent var(--fill, 50%));
+    cursor: pointer;
+  }
+  .slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--color-ink);
+    background: var(--color-lime);
+    box-shadow: 2px 2px 0 var(--color-ink);
+  }
+  .slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--color-ink);
+    background: var(--color-lime);
+    box-shadow: 2px 2px 0 var(--color-ink);
+  }
+  input:checked + span .tick::after {
+    content: "✓";
+    font-weight: 900;
+  }
+  :global(.json-key) { color: #d9d4ff; }
+  :global(.json-str) { color: #c8f560; }
+  :global(.json-num) { color: #ffb38a; }
+  :global(.json-bool) { color: #ff7ad9; }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-builder]')!
+  const out = (key: string) => document.querySelectorAll<HTMLElement>(`[data-out="${key}"]`)
+  const preview = document.querySelector<HTMLElement>('[data-preview]')!
+  const code = document.querySelector<HTMLElement>('[data-json]')!
+  const cap = document.querySelector<HTMLElement>('[data-cap]')!
+
+  const slug = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'my-pack'
+  const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+  const highlight = (json: string) =>
+    escape(json).replace(/("(?:\\.|[^"\\])*")(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d+)?/g, (m, str, colon, bool) => {
+      if (str) return colon ? `<span class="json-key">${str}</span>${colon}` : `<span class="json-str">${str}</span>`
+      if (bool) return `<span class="json-bool">${m}</span>`
+      return `<span class="json-num">${m}</span>`
+    })
+
+  const pack = () => {
+    const d = new FormData(form)
+    const text = (k: string) => String(d.get(k) ?? '').trim()
+    const num = (k: string) => Number(d.get(k) ?? 0)
+    const on = (k: string) => d.get(k) === 'on'
+    const name = text('name') || 'My Pack'
+    return {
+      id: slug(name),
+      name,
+      tagline: text('tagline'),
+      color: text('color'),
+      role: text('role'),
+      persona: text('persona'),
+      vibe: { spice: num('spice'), chattiness: num('chattiness'), formality: num('formality'), emoji: num('emoji') },
+      language: text('language'),
+      roasts: on('roasts'),
+      speak_when: ['someone asks the group a question', "a setup that's begging for a punchline", 'a callback to an old group joke'],
+      quiet_when: ['logistics: times, addresses, payments', 'fast back-and-forth where any reply is noise'],
+      features: { memes: on('memes'), voice: on('voice'), weekly_recap: on('weekly_recap'), reactions: on('reactions'), trends: on('trends') },
+      off_limits: [],
+      recap_style: 'a short weekly recap with silly awards',
+      intro: text('intro'),
+      examples: [{ them: 'Aman: kal se gym pakka', you: "ye 'kal' pichle semester se chal raha hai" }],
+    }
+  }
+
+  let current = pack()
+
+  const render = () => {
+    current = pack()
+    const json = JSON.stringify(current, null, 2)
+    code.innerHTML = highlight(json)
+    preview.style.background = current.color
+    out('name').forEach((n) => (n.textContent = current.name))
+    out('tagline').forEach((n) => (n.textContent = current.tagline || ' '))
+    out('intro').forEach((n) => (n.textContent = current.intro.replaceAll('{BOT_NAME}', 'Yapper')))
+    out('file').forEach((n) => (n.textContent = `${current.id}.json`))
+    out('cmd').forEach((n) => (n.textContent = `!vibe ${current.id}`))
+    cap.classList.toggle('hidden', current.roasts || current.vibe.spice <= 2)
+    form.querySelectorAll<HTMLInputElement>('input[type=range]').forEach((r) => {
+      const words = JSON.parse(r.dataset.words ?? '[]') as string[]
+      r.style.setProperty('--fill', `${(Number(r.value) / Number(r.max)) * 100}%`)
+      const label = form.querySelector(`[data-word="${r.name}"]`)
+      if (label) label.textContent = words[Number(r.value)] ?? ''
+    })
+  }
+
+  const flash = (btn: HTMLElement, text: string) => {
+    const was = btn.textContent
+    btn.textContent = text
+    setTimeout(() => (btn.textContent = was), 1400)
+  }
+
+  form.addEventListener('input', render)
+  form.addEventListener('submit', (e) => e.preventDefault())
+
+  document.querySelector<HTMLButtonElement>('[data-copy]')!.addEventListener('click', async (e) => {
+    const btn = e.currentTarget as HTMLElement
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(current, null, 2))
+      flash(btn, 'copied')
+    } catch {
+      flash(btn, 'select it')
+    }
+  })
+
+  document.querySelector<HTMLButtonElement>('[data-download]')!.addEventListener('click', () => {
+    const url = URL.createObjectURL(new Blob([JSON.stringify(current, null, 2) + '\n'], { type: 'application/json' }))
+    const a = Object.assign(document.createElement('a'), { href: url, download: `${current.id}.json` })
+    a.click()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+  })
+
+  render()
+</script>

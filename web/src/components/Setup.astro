@@ -1,0 +1,52 @@
+---
+import { site } from '../lib/site'
+
+const steps = [
+  { title: 'Grab it', body: 'Clone the repo and add one free API key. Sarvam and Z.ai both have free tiers that cover a whole friend group.' },
+  { title: 'Connect a platform', body: 'Scan a QR for WhatsApp, or paste a bot token for Telegram or Discord. Use one, two or all three.' },
+  { title: 'Allow a group', body: 'Add the group id and say hi. Yapper introduces itself, says it is an AI and waits for its moment.' },
+]
+
+const repo = site.github.replace('https://', '')
+---
+
+<section id="setup" class="scroll-mt-16 border-y-2 border-ink bg-paper-2 px-4 py-24 sm:px-6 lg:py-32" aria-labelledby="setup-title">
+  <div class="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20">
+    <div>
+      <p class="reveal label mb-4 text-muted">setup</p>
+      <h2 id="setup-title" class="reveal display text-[clamp(2.8rem,7vw,6rem)]">Up in <span class="serif font-normal">ten minutes.</span></h2>
+      <ol class="mt-12 space-y-8">
+        {
+          steps.map((s, i) => (
+            <li class="reveal flex gap-5">
+              <span class="display w-14 shrink-0 text-5xl text-transparent [-webkit-text-stroke:2px_var(--color-ink)]">{i + 1}</span>
+              <div>
+                <h3 class="text-xl font-bold">{s.title}</h3>
+                <p class="mt-1 text-ink/70">{s.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <div class="reveal self-center">
+      <div class="overflow-hidden rounded-[22px] border-2 border-ink bg-ink text-paper shadow-hard-lg">
+        <div class="flex items-center gap-2 border-b border-paper/15 px-4 py-3">
+          <span class="size-3 rounded-full bg-pink"></span><span class="size-3 rounded-full bg-peach"></span><span class="size-3 rounded-full bg-lime"></span>
+          <span class="ml-3 font-mono text-xs text-paper/50">terminal</span>
+        </div>
+        <pre class="overflow-x-auto p-6 font-mono text-[0.82rem] leading-[1.9]"><code><span class="text-dim">$</span> git clone https://{repo}
+<span class="text-dim">$</span> cd YAPPER-AGENT && cp .env.example .env
+<span class="text-dim"># add SARVAM_API_KEY and ZAI_API_KEY</span>
+<span class="text-dim"># optional: TELEGRAM_BOT_TOKEN, DISCORD_BOT_TOKEN</span>
+<span class="text-dim">$</span> docker compose up -d
+<span class="text-lime">✓ brain ready</span>
+<span class="text-lime">✓ whatsapp  scan the QR in the logs</span>
+<span class="text-lime">✓ telegram  @your_yapper_bot</span>
+<span class="text-dim">$</span> <span class="animate-blink">▍</span></code></pre>
+      </div>
+      <p class="mt-5 text-sm text-ink/60">Prefer no Docker? Python and Node run it natively too. The README walks through both.</p>
+    </div>
+  </div>
+</section>

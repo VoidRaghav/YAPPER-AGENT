@@ -1,0 +1,29 @@
+---
+import PackCard from './PackCard.astro'
+import { packs } from '../lib/packs'
+---
+
+<section id="packs" class="relative mx-2 scroll-mt-20 rounded-[2rem] bg-ink px-4 py-24 text-paper sm:mx-4 sm:rounded-[3.5rem] sm:px-6 lg:py-32" aria-labelledby="packs-title">
+  <div class="mx-auto max-w-6xl">
+    <div class="reveal mb-16 flex flex-wrap items-end justify-between gap-6">
+      <div>
+        <p class="label mb-4 text-dim">persona packs</p>
+        <h2 id="packs-title" class="display text-[clamp(2.8rem,7vw,6rem)]">Pick a <span class="serif font-normal text-lime">vibe.</span></h2>
+      </div>
+      <p class="max-w-sm text-paper/70">Same brain, different personality. Each group gets its own pack, and one command switches it.</p>
+    </div>
+
+    <div class="grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+      {packs.map((pack, i) => <PackCard pack={pack} index={i} />)}
+
+      <a
+        href="#build"
+        class="reveal group flex min-h-80 flex-col items-center justify-center gap-4 rounded-[28px] border-2 border-dashed border-paper/40 p-6 text-center transition-colors hover:border-lime hover:bg-paper/5"
+      >
+        <span class="grid size-16 place-items-center rounded-full border-2 border-paper/40 text-3xl transition-all group-hover:rotate-90 group-hover:border-lime group-hover:bg-lime group-hover:text-ink">+</span>
+        <span class="display text-4xl">Your pack</span>
+        <span class="max-w-[16rem] text-sm text-paper/60">Your group is weird in its own way. Write a pack that gets it.</span>
+      </a>
+    </div>
+  </div>
+</section>

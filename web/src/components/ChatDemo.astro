@@ -1,0 +1,181 @@
+---
+import { scenes } from '../lib/demo'
+import { packs } from '../lib/packs'
+
+const colorOf = (id: string) => packs.find((p) => p.id === id)?.color ?? '#c8f560'
+const first = scenes[0]
+---
+
+<div class="relative" data-demo>
+  <div class="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Pick a pack">
+    {
+      scenes.map((scene, i) => (
+        <button
+          type="button"
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          data-tab={i}
+          data-color={colorOf(scene.pack)}
+          class="group flex items-center gap-2 rounded-full border-2 border-ink px-3.5 py-1.5 text-sm font-semibold transition-all aria-selected:bg-ink aria-selected:text-paper hover:-translate-y-0.5"
+        >
+          <span class="size-2.5 rounded-full border border-ink group-aria-selected:border-paper" style={`background:${colorOf(scene.pack)}`} />
+          {scene.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="card relative overflow-hidden shadow-hard-lg" data-frame style={`--accent:${colorOf(first.pack)}`}>
+    <div class="flex items-center gap-3 border-b-2 border-ink bg-[var(--accent)] px-4 py-3 transition-colors duration-500">
+      <div class="grid size-10 place-items-center rounded-full border-2 border-ink bg-paper text-lg font-extrabold" data-avatar>{first.group[0].toUpperCase()}</div>
+      <div class="min-w-0">
+        <p class="truncate font-bold leading-tight" data-group>{first.group}</p>
+        <p class="text-xs text-ink/70" data-members>{first.members} members, yapper included</p>
+      </div>
+      <div class="ml-auto flex gap-1.5" aria-hidden="true">
+        <span class="size-2.5 rounded-full border-2 border-ink"></span>
+        <span class="size-2.5 rounded-full border-2 border-ink"></span>
+        <span class="size-2.5 rounded-full border-2 border-ink bg-ink"></span>
+      </div>
+    </div>
+
+    <div
+      class="relative flex h-[23rem] flex-col justify-end gap-2.5 overflow-hidden px-4 pt-6 pb-4 [mask-image:linear-gradient(to_bottom,transparent,black_4.5rem)] sm:h-[25rem]"
+      style="background-image: radial-gradient(color-mix(in oklab, var(--color-ink) 9%, transparent) 1px, transparent 1px); background-size: 16px 16px;"
+      data-feed
+      aria-live="polite"
+    >
+    </div>
+
+    <div class="flex items-center gap-2 border-t-2 border-ink bg-ink px-4 py-2.5 font-mono text-[0.72rem] text-lime">
+      <span class="text-dim">yapper</span>
+      <span class="text-dim">&gt;</span>
+      <span class="truncate" data-hud>reading the room</span>
+      <span class="animate-blink">_</span>
+    </div>
+  </div>
+
+  <div class="pointer-events-none absolute top-56 -left-16 z-10 hidden rotate-[-14deg] animate-float sm:block" aria-hidden="true">
+    <div class="grid size-16 place-items-center rounded-full border-2 border-ink bg-paper text-3xl shadow-hard">💀</div>
+  </div>
+  <div class="pointer-events-none absolute top-24 -right-7 hidden rotate-[10deg] animate-float [animation-delay:-2.4s] sm:block" aria-hidden="true">
+    <div class="grid size-14 place-items-center rounded-2xl border-2 border-ink bg-pink text-2xl shadow-hard">🔥</div>
+  </div>
+  <div class="pointer-events-none absolute -bottom-7 left-10 hidden rotate-[-5deg] animate-float [animation-delay:-4.1s] sm:block" aria-hidden="true">
+    <div class="rounded-full border-2 border-ink bg-lime px-4 py-2 font-mono text-xs font-bold shadow-hard">knows when to shut up</div>
+  </div>
+</div>
+
+<script>
+  import { animate } from 'motion'
+  import { scenes, type Line } from '../lib/demo'
+
+  const root = document.querySelector<HTMLElement>('[data-demo]')!
+  const feed = root.querySelector<HTMLElement>('[data-feed]')!
+  const frame = root.querySelector<HTMLElement>('[data-frame]')!
+  const hud = root.querySelector<HTMLElement>('[data-hud]')!
+  const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')]
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  let run = 0
+  let current = 0
+  let visible = false
+
+  const wait = (ms: number, id: number) =>
+    new Promise<void>((resolve, reject) => setTimeout(() => (id === run ? resolve() : reject(new Error('stale'))), still ? 0 : ms))
+
+  const el = (tag: string, cls: string, text?: string) => {
+    const node = document.createElement(tag)
+    node.className = cls
+    if (text) node.textContent = text
+    return node
+  }
+
+  const enter = (node: HTMLElement) => {
+    feed.append(node)
+    while (feed.scrollHeight > feed.clientHeight + 4 && feed.children.length > 1) feed.firstElementChild?.remove()
+    if (!still) animate(node, { opacity: [0, 1], y: [14, 0], scale: [0.96, 1] }, { type: 'spring', bounce: 0.3, duration: 0.5 })
+  }
+
+  const bubble = (line: Line) => {
+    if ('skip' in line) {
+      return el('p', 'mx-auto my-1 rounded-full border border-dashed border-ink/40 bg-paper/80 px-3 py-1 font-mono text-[0.68rem] text-muted', `${line.skip} messages read, stayed quiet`)
+    }
+    if ('bot' in line) {
+      const wrap = el('div', 'relative ml-auto max-w-[84%] origin-bottom-right rounded-2xl rounded-br-md border-2 border-ink bg-[var(--accent)] px-3.5 py-2.5 shadow-[3px_3px_0_0_var(--color-ink)]')
+      wrap.append(el('p', 'mb-0.5 font-mono text-[0.66rem] font-bold uppercase tracking-wider', '🤖 yapper'), el('p', 'text-[0.95rem] leading-snug', line.text))
+      return wrap
+    }
+    const wrap = el('div', 'max-w-[80%] origin-bottom-left rounded-2xl rounded-bl-md border-2 border-ink bg-white px-3.5 py-2.5')
+    const name = el('p', 'mb-0.5 text-[0.72rem] font-bold', line.who)
+    name.style.color = 'color-mix(in oklab, ' + (line.tint ?? '#131311') + ' 55%, #131311)'
+    wrap.append(name, el('p', 'text-[0.95rem] leading-snug', line.text))
+    return wrap
+  }
+
+  const typing = () => {
+    const node = el('div', 'ml-auto flex gap-1 rounded-2xl rounded-br-md border-2 border-ink bg-[var(--accent)] px-4 py-3.5')
+    for (let i = 0; i < 3; i++) {
+      const dot = el('span', 'size-1.5 rounded-full bg-ink')
+      if (!still) animate(dot, { y: [0, -4, 0] }, { duration: 0.7, repeat: Infinity, delay: i * 0.12 })
+      node.append(dot)
+    }
+    return node
+  }
+
+  const setScene = (i: number) => {
+    current = i
+    const scene = scenes[i]
+    const tab = tabs[i]
+    tabs.forEach((t, j) => t.setAttribute('aria-selected', String(j === i)))
+    frame.style.setProperty('--accent', tab.dataset.color ?? '#c8f560')
+    root.querySelector('[data-group]')!.textContent = scene.group
+    root.querySelector('[data-avatar]')!.textContent = scene.group[0].toUpperCase()
+    root.querySelector('[data-members]')!.textContent = `${scene.members} members, yapper included`
+    feed.replaceChildren()
+    hud.textContent = 'reading the room'
+  }
+
+  const play = async (i: number) => {
+    const id = ++run
+    setScene(i)
+    try {
+      for (const line of scenes[i].lines) {
+        if ('bot' in line) {
+          hud.textContent = 'something worth saying. drafting'
+          await wait(500, id)
+          const dots = typing()
+          enter(dots)
+          await wait(1500, id)
+          dots.remove()
+          const node = bubble(line)
+          enter(node)
+          hud.textContent = line.hud
+          if (line.react) {
+            await wait(900, id)
+            const chip = el('span', 'absolute -bottom-3 left-3 rounded-full border-2 border-ink bg-paper px-2 py-0.5 text-xs font-semibold', line.react)
+            node.classList.add('mb-3')
+            node.append(chip)
+            if (!still) animate(chip, { scale: [0, 1.15, 1] }, { duration: 0.45 })
+          }
+        } else {
+          enter(bubble(line))
+          hud.textContent = 'skip, nothing to add'
+        }
+        await wait(1300, id)
+      }
+      if (still) return
+      await wait(3600, id)
+      if (visible) play((current + 1) % scenes.length)
+    } catch {}
+  }
+
+  tabs.forEach((tab, i) => tab.addEventListener('click', () => play(i)))
+
+  new IntersectionObserver(([entry]) => {
+    const was = visible
+    visible = entry.isIntersecting
+    if (visible && !was) play(current)
+    if (!visible) run++
+  }).observe(root)
+</script>

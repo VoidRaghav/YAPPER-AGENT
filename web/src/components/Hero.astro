@@ -1,0 +1,70 @@
+---
+import ChatDemo from './ChatDemo.astro'
+import { site } from '../lib/site'
+
+const words = ['The', 'member', 'your', 'group', 'chat', 'was']
+---
+
+<section id="top" class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pt-32 pb-10 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10 lg:pt-40 lg:pb-16">
+  <div>
+    <p class="label mb-7 inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-full border-2 border-ink bg-paper px-4 py-2 font-semibold">
+      <span class="relative flex size-2"><span class="absolute inset-0 animate-ping rounded-full bg-wa"></span><span class="relative size-2 rounded-full bg-wa"></span></span>
+      open source
+      <span class="text-dim">/</span>
+      runs on free models
+    </p>
+
+    <h1 class="display text-[clamp(3.3rem,8.2vw,7.4rem)]" data-headline>
+      {
+        words.map((w) => (
+          <span class="mr-[0.22em] inline-block overflow-hidden pb-[0.08em] align-bottom">
+            <span class="inline-block" data-word>{w}</span>
+          </span>
+        ))
+      }
+      <span class="inline-block overflow-hidden pb-[0.08em] align-bottom">
+        <span class="serif relative isolate inline-block pr-[0.1em] text-[1.08em] font-normal" data-word>
+          <span class="absolute inset-x-[-0.06em] bottom-[0.16em] -z-10 h-[0.38em] -rotate-1 rounded-sm bg-lime" data-mark></span>
+          missing.
+        </span>
+      </span>
+    </h1>
+
+    <p class="mt-8 max-w-[34rem] text-lg leading-relaxed text-ink/80 sm:text-xl">
+      Yapper joins your group, reads the room and only talks when it has something worth saying. Roasts for friends, warmth for family, deadlines for the study group.
+    </p>
+
+    <div class="mt-9 flex flex-wrap items-center gap-3">
+      <a href={site.github} class="btn bg-lime text-ink" rel="noopener">
+        Get it free
+        <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+      <a href="#packs" class="btn bg-transparent">See the packs</a>
+    </div>
+
+    <ul class="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-muted" aria-label="Platforms">
+      <li class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-wa"></span>WhatsApp</li>
+      <li class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-tg"></span>Telegram</li>
+      <li class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-dc"></span>Discord</li>
+    </ul>
+  </div>
+
+  <div class="relative mx-auto w-full max-w-md lg:mr-0">
+    <ChatDemo />
+  </div>
+</section>
+
+<script>
+  import { animate, stagger } from 'motion'
+
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    animate('[data-word]', { y: ['105%', '0%'] }, { delay: stagger(0.07), duration: 0.8, ease: [0.2, 0.9, 0.1, 1] })
+    animate('[data-mark]', { scaleX: [0, 1] }, { delay: 0.75, duration: 0.6, ease: [0.6, 0, 0.2, 1] })
+  }
+</script>
+
+<style>
+  [data-mark] {
+    transform-origin: left center;
+  }
+</style>
