@@ -122,6 +122,39 @@ Restart (`docker compose up -d`, or restart both terminals).
 
 `DRY_RUN=true` is on by default. Yapper reads and decides, but only logs what it would say. When you like what you see, set `DRY_RUN=false` and restart. It introduces itself in the group and tells everyone it's an AI.
 
+## Keep it running 24/7
+
+Yapper stops when your laptop sleeps. To keep it up, run it on a small cloud server. Any Ubuntu 22.04 or 24.04 machine with 2 GB+ RAM works.
+
+**Free option: Oracle Cloud Always Free**
+1. Sign up at [oracle.com/cloud/free](https://www.oracle.com/cloud/free/). Pick a home region close to you.
+2. Create a compute instance:
+   - Image: **Ubuntu 24.04**
+   - Shape: **VM.Standard.A1.Flex** (Ampere), 1 OCPU and 6 GB memory
+   - SSH key: paste the output of `cat ~/.ssh/id_ed25519.pub`
+3. Upgrade the account to **Pay As You Go**. You still pay nothing inside the free limits, but Oracle stops reclaiming free machines that look idle.
+
+If Oracle says "out of capacity", try another availability domain or try again later. Any paid VPS works too, for example Hetzner (about €4 a month).
+
+**Move Yapper from your computer to the server**
+
+```bash
+./deploy/move-to-server.sh ubuntu@YOUR_SERVER_IP
+```
+
+This installs Docker on the server, builds Yapper and copies your `.env`, the bot's memory and the WhatsApp login. Then it stops Yapper on your computer and starts it on the server. You don't need to scan a new QR code. It restarts on its own after a crash or a reboot.
+
+On the server:
+
+```bash
+cd ~/YAPPER-AGENT
+sudo docker compose logs -f                        # watch it
+sudo docker compose restart                        # restart
+git pull && sudo docker compose up -d --build      # update to the latest version
+```
+
+WhatsApp may trust a server IP a little less than your home Wi-Fi. Telegram and Discord don't care.
+
 ## Persona packs
 
 Each group gets a pack that sets the bot's personality.
