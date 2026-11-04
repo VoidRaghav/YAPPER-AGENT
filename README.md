@@ -4,6 +4,8 @@ An AI that joins your group chat like a real member. It reads along, stays quiet
 
 Works on **WhatsApp, Telegram and Discord**. Free, open source, and runs on free AI models.
 
+**Website:** [voidraghav.github.io/YAPPER-AGENT](https://voidraghav.github.io/YAPPER-AGENT/)
+
 ```
 aman:   bhai 5 min mein pahunch raha hoon
 priya:  tu ghar se nikla bhi hai?
@@ -139,7 +141,7 @@ Switch packs from the group with `!vibe study`.
 2. Edit the personality, language, sliders and examples.
 3. Type `!vibe my-pack` in the group. No restart needed.
 
-The [website](web/) has a pack builder that writes this file for you.
+Or use the [pack builder](https://voidraghav.github.io/YAPPER-AGENT/#build) on the website. It writes the file for you.
 
 ## Commands
 
