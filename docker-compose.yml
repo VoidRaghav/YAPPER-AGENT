@@ -8,6 +8,7 @@ x-logging: &logging
 
 services:
   brain:
+    image: ghcr.io/voidraghav/yapper-brain:latest
     build:
       context: .
       dockerfile: brain/Dockerfile
@@ -25,6 +26,7 @@ services:
     logging: *logging
 
   gateway:
+    image: ghcr.io/voidraghav/yapper-gateway:latest
     build: ./gateway
     env_file: .env
     environment:

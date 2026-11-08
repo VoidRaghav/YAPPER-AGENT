@@ -36,9 +36,9 @@ fi
 echo "2/6 installing docker and the code on the server"
 "${SSH[@]}" "bash -s" < "$ROOT/deploy/setup-server.sh"
 
-echo "3/6 building Yapper on the server (first time takes a few minutes)"
+echo "3/6 downloading Yapper on the server"
 upload "$ROOT" .env
-"${SSH[@]}" "chmod 600 $REMOTE_DIR/.env && cd $REMOTE_DIR && sudo docker compose build -q"
+"${SSH[@]}" "chmod 600 $REMOTE_DIR/.env && cd $REMOTE_DIR && (sudo docker compose pull -q || sudo docker compose build -q)"
 
 pids="$(local_pids)"
 if [ -n "$pids" ]; then

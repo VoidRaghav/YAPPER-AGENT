@@ -67,8 +67,10 @@ uv run python -m scripts.simulate -v # chat as different people
 With Docker:
 
 ```bash
-docker compose up -d --build
+docker compose up -d
 ```
+
+This downloads ready-made images, so there is nothing to build. Changed the code yourself? Add `--build`.
 
 Without Docker, use two terminals:
 
@@ -142,7 +144,7 @@ If Oracle says "out of capacity", try another availability domain or try again l
 ./deploy/move-to-server.sh ubuntu@YOUR_SERVER_IP
 ```
 
-This installs Docker on the server, builds Yapper and copies your `.env`, the bot's memory and the WhatsApp login. Then it stops Yapper on your computer and starts it on the server. You don't need to scan a new QR code. It restarts on its own after a crash or a reboot.
+This installs Docker on the server, downloads Yapper and copies your `.env`, the bot's memory and the WhatsApp login. Then it stops Yapper on your computer and starts it on the server. You don't need to scan a new QR code. It restarts on its own after a crash or a reboot.
 
 On the server:
 
@@ -150,7 +152,7 @@ On the server:
 cd ~/YAPPER-AGENT
 sudo docker compose logs -f                        # watch it
 sudo docker compose restart                        # restart
-git pull && sudo docker compose up -d --build      # update to the latest version
+git pull && sudo docker compose pull && sudo docker compose up -d   # update
 ```
 
 WhatsApp may trust a server IP a little less than your home Wi-Fi. Telegram and Discord don't care.

@@ -1,0 +1,80 @@
+name: Docker images
+
+on:
+  push:
+    branches: [main]
+    paths: [brain/**, gateway/**, packs/**, assets/**, .github/workflows/images.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: images
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io/voidraghav
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [brain, gateway]
+        arch: [amd64, arm64]
+        include:
+          - image: brain
+            context: .
+            file: brain/Dockerfile
+          - image: gateway
+            context: gateway
+            file: gateway/Dockerfile
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v7
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          platforms: linux/${{ matrix.arch }}
+          push: true
+          provenance: false
+          tags: ${{ env.REGISTRY }}/yapper-${{ matrix.image }}:latest-${{ matrix.arch }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.description=Yapper ${{ matrix.image }}
+            org.opencontainers.image.licenses=MIT
+          cache-from: type=gha,scope=${{ matrix.image }}-${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}-${{ matrix.arch }}
+
+  merge:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: [brain, gateway]
+    steps:
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tag latest for both architectures
+        run: |
+          img="$REGISTRY/yapper-${{ matrix.image }}"
+          docker buildx imagetools create \
+            -t "$img:latest" -t "$img:sha-${GITHUB_SHA::7}" \
+            "$img:latest-amd64" "$img:latest-arm64"
